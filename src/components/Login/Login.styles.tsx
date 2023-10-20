@@ -34,19 +34,6 @@ const Card = styled.div`
   padding: 1rem;
 `;
 
-const Logo = styled.div`
-  font-size: 2.5rem;
-  color: rgb(103, 101, 101);
-  font-weight: bold;
-  letter-spacing: 1px;
-
-  &::first-letter {
-    font-size: 3.5rem;
-    color: #f78f02;
-    font-weight: bold;
-  }
-`;
-
 const ContainerP = styled.p`
   font-size: 1.25rem;
   max-width: 25rem;
@@ -57,7 +44,6 @@ const ContainerInput = styled.input`
   display: block;
   height: 3rem;
   width: 20rem;
-  font-size: 1rem;
   border-radius: 10px;
   padding: 1rem;
   border: 1px solid rgb(190, 183, 183);
@@ -77,45 +63,6 @@ const ContainerInput = styled.input`
   }
 `;
 
-const PrimaryButton = styled.button`
-  border: none;
-  height: 3rem;
-  width: 20rem;
-  background-color: #e99827;
-  color: white;
-  font-weight: 600;
-  font-size: 1.15rem;
-  cursor: pointer;
-  position: relative;
-  margin: 1rem;
-  padding: 1rem;
-  border-radius: 10px;
-
-  &::after {
-    content: '';
-    display: block;
-    height: 1px;
-    background-color: #919495;
-    position: absolute;
-    top: 4rem;
-    left: 50%;
-    width: 80%;
-    transform: translateX(-50%);
-  }
-`;
-
-const SecondaryButton = styled.button`
-  margin: 1rem 1rem;
-  background: none;
-  border: 2px solid #e99827;
-  font-weight: 500;
-  font-size: 1.15rem;
-  cursor: pointer;
-  height: 3rem;
-  width: 20rem;
-  border-radius: 10px;
-`;
-
 const Strong = styled.strong`
   display: block;
   margin: 1.5rem 1rem 1rem 1rem;
@@ -128,15 +75,4 @@ const Message = styled.p`
   font-size: 1.15rem;
 `;
 
-export {
-  Container,
-  Wrapper,
-  Card,
-  Logo,
-  ContainerP,
-  ContainerInput,
-  PrimaryButton,
-  SecondaryButton,
-  Strong,
-  Message,
-};
+export { Container, Wrapper, Card, ContainerP, ContainerInput, Strong, Message };

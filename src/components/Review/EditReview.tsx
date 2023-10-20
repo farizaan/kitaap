@@ -1,8 +1,8 @@
-import React, {useContext, useState, useRef} from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import {useUserContext} from "@/hooks/useUserContext";
-import {Rating} from "react-simple-star-rating";
+import { useUserContext } from '@/hooks/useUserContext';
+import { Rating } from 'react-simple-star-rating';
 
 const Container = styled.div`
   background-color: #f4e8de;
@@ -142,112 +142,113 @@ const RatingText = styled.div`
   color: #474644;
 `;
 
-const WriteReview:React.FC<any> = ({
-                         bookId: id,
-                         showReviewForm,
-                         setShowReviewForm,
-                         prevRating,
-                         prevReview,
-                         setYourReviews,
-                     }) => {
-    const {user} = useUserContext();
-    const [rating, setRating] = useState(0);
-    const [error, setError] = useState('');
-    const reviewRef = useRef(null);
+const EditReview: React.FC<any> = ({
+  bookId: id,
+  showReviewForm,
+  setShowReviewForm,
+  prevRating,
+  prevReview,
+  setYourReviews,
+}) => {
+  const { user } = useUserContext();
+  const [rating, setRating] = useState(0);
+  const [error, setError] = useState('');
+  const reviewRef = useRef<any>(null);
 
-    const addReview = async () => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reviews/edit`, {
-            method: 'PATCH',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id,
-                stars: rating / 20,
-                review: reviewRef?.current?.value,
-            }),
-        });
+  const addReview = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reviews/edit`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+        stars: rating / 20,
+        review: reviewRef?.current?.value,
+      }),
+    });
 
-        const data = await res.json();
-        if (data.status === 'success') {
-            console.log('data message', data.message);
-            setYourReviews(() => [
-                {
-                    ...data.message,
-                },
-            ]);
-            setShowReviewForm(() => false);
-        } else {
-            setError(data.message);
-        }
-    };
-
-    if (user) {
-        return (
-            <>
-                {showReviewForm && (
-                    <ReviewFormWrapper
-                        onClick={() => {
-                            setShowReviewForm(() => false);
-                        }}
-                    >
-                        <ReviewForm
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <ReviewTitle onClick={(e) => e.stopPropagation()}>Edit review</ReviewTitle>
-                            <UserDetails>
-                                <Avatar>
-                                    <Image
-                                        src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-                                        layout="fill"
-                                        alt="profile photo"
-                                    />
-                                </Avatar>
-                                <div>
-                                    <UserName>{user.name}</UserName>
-                                    <Privacy>Public</Privacy>
-                                </div>
-                            </UserDetails>
-                            <StarRating onClick={() => setError('')}>
-                                <Rating
-                                    ratingValue={rating}
-                                    onClick={setRating}
-                                    initialValue={prevRating}
-                                    iconsCount={5}
-                                    fillColor="#d57f07"
-                                    emptyColor="#a8a8a5"
-                                    size={28}
-                                />
-                                {rating > 0 && (
-                                    <RatingText>({rating / 20} star{rating > 1 ? 's' : ''})</RatingText>
-                                )}
-                            </StarRating>
-                            {error && <RatingText>{error}</RatingText>}
-                            <ReviewTextArea
-                                onClick={(e) => e.stopPropagation()}
-                                autoFocus={true}
-                                ref={reviewRef}
-                                onChange={() => setError('')}
-                            >
-                                {prevReview}
-                            </ReviewTextArea>
-                            <PrimaryButton
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    addReview();
-                                }}
-                            >
-                                Edit
-                            </PrimaryButton>
-                        </ReviewForm>
-                    </ReviewFormWrapper>
-                )}
-            </>
-        );
+    const data = await res.json();
+    if (data.status === 'success') {
+      console.log('data message', data.message);
+      setYourReviews(() => [
+        {
+          ...data.message,
+        },
+      ]);
+      setShowReviewForm(() => false);
+    } else {
+      setError(data.message);
     }
+  };
+  console.log('REVIEW', user);
 
-    return null;
+  if (user) {
+    return (
+      <>
+        {showReviewForm && (
+          <ReviewFormWrapper
+            onClick={() => {
+              setShowReviewForm(() => false);
+            }}
+          >
+            <ReviewForm onClick={(e) => e.stopPropagation()}>
+              <ReviewTitle onClick={(e) => e.stopPropagation()}>Edit review</ReviewTitle>
+              <UserDetails>
+                <Avatar>
+                  <Image
+                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                    layout="fill"
+                    alt="profile photo"
+                  />
+                </Avatar>
+                <div>
+                  <UserName>{user.name}</UserName>
+                  <Privacy>Public</Privacy>
+                </div>
+              </UserDetails>
+              <StarRating onClick={() => setError('')}>
+                <Rating
+                  // ratingValue={Number(rating)}
+                  onClick={setRating}
+                  initialValue={prevRating}
+                  iconsCount={5}
+                  fillColor="#d57f07"
+                  emptyColor="#a8a8a5"
+                  size={28}
+                />
+                {rating > 0 && (
+                  <RatingText>
+                    ({rating / 20} star{rating > 1 ? 's' : ''})
+                  </RatingText>
+                )}
+              </StarRating>
+              {error && <RatingText>{error}</RatingText>}
+              <ReviewTextArea
+                onClick={(e) => e.stopPropagation()}
+                autoFocus={true}
+                ref={reviewRef}
+                onChange={() => setError('')}
+              >
+                {prevReview}
+              </ReviewTextArea>
+              <PrimaryButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addReview();
+                }}
+              >
+                Edit
+              </PrimaryButton>
+            </ReviewForm>
+          </ReviewFormWrapper>
+        )}
+      </>
+    );
+  }
+
+  return null;
 };
 
-export default WriteReview;
+export default EditReview;

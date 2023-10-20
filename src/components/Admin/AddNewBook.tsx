@@ -131,9 +131,11 @@ const AddNewBook = () => {
     })();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
+    // @ts-ignore
     const formData = new FormData(formRef.current);
+    // @ts-ignore
     for (const [key, value] of formData) {
       console.log(key, value);
       if (key !== 'image' && value === '') {
@@ -155,11 +157,14 @@ const AddNewBook = () => {
       });
       const data = await res.json();
       if (data.status === 'success') {
+        // @ts-ignore
         setAddedBooks((prev) => [data.message, ...prev]);
+        // @ts-ignore
         formRef.current.reset();
       } else if (data.status === 'error') {
         setMessage(() => data.message);
       }
+      // @ts-ignore
       console.log(...formData);
     })();
   };
@@ -183,7 +188,7 @@ const AddNewBook = () => {
           </div>
           <div>
             <Label>Description</Label>
-            <Textarea name="description" type="text" placeholder="Eg: Description" />
+            <Textarea name="description" placeholder="Eg: Description" />
           </div>
           <div>
             <Label>Authors</Label>

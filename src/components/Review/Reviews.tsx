@@ -16,6 +16,7 @@ const ReviewWrapper = styled.div`
   background-color: #f4e8de;
   border-radius: 10px;
   margin-bottom: 1rem;
+  width: 100%;
 `;
 
 const ReviewTitle = styled.p`

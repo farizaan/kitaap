@@ -40,8 +40,10 @@ const Slider: React.FC<{ popularBooks: any[] }> = ({ popularBooks }) => {
       );
       const dataPB = await resPopularBooks.json();
       console.log(dataPB);
+      // @ts-ignore
       const newBooks = dataPB?.message?.map((book) => {
         let bookCopy = book;
+        // @ts-ignore
         user?.cartItems?.map((item) => {
           if (item.bookId === book._id) {
             bookCopy['isInCart'] = true;

@@ -6,6 +6,7 @@ import { useUserContext } from '@/hooks/useUserContext';
 import Link from 'next/link';
 import Image from 'next/image';
 import styled from 'styled-components';
+import Logo from '@/components/Logo/Logo';
 
 const NavContainer = styled.nav`
   display: flex;
@@ -21,11 +22,6 @@ const NavContainer = styled.nav`
     padding: 1.2rem 5% 0.7rem 5%;
     background-color: white;
   }
-`;
-
-const Logo = styled.div`
-  flex: 1;
-  cursor: pointer;
 `;
 
 const SearchWrapper = styled.div`
@@ -122,19 +118,6 @@ const CartIcon = styled.div`
   width: 2rem;
 `;
 
-const LogoText = styled.div`
-  font-size: 1.3rem;
-  color: rgb(103, 101, 101);
-  font-weight: 700;
-  letter-spacing: 1px;
-
-  &::first-letter {
-    font-size: 2rem;
-    color: #f78f02;
-    font-weight: 800;
-  }
-`;
-
 const NavLinks = styled.div`
   display: flex;
   font-size: 0.9rem;
@@ -221,9 +204,7 @@ const Nav = () => {
   return (
     <>
       <NavContainer ref={navRef}>
-        <Link href="/admin">
-          <LogoText>Kitaab</LogoText>
-        </Link>
+        <Logo link={'/admin'} />
         <SearchWrapper>
           <Search>
             <SearchInput

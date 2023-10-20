@@ -1,10 +1,10 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import EditReview from './EditReview'; // You need to import the EditReview component
 
-import {useUserContext} from "@/hooks/useUserContext";
-import {Rating} from "react-simple-star-rating";
+import { useUserContext } from '@/hooks/useUserContext';
+import { Rating } from 'react-simple-star-rating';
 
 const ReviewContainer = styled.div`
   background-color: #f4e8de;
@@ -57,7 +57,7 @@ const ReviewTextArea = styled.textarea`
   border-radius: 0 0 10px 10px;
   background-color: #f4e8de;
   height: 60%;
-  min-height: 7rem;
+  //min-height: 7rem;
   width: 100%;
   font-size: 1.15rem;
   color: #474644;
@@ -137,7 +137,6 @@ const StarRating = styled.div`
   align-items: center;
   gap: 0.3rem;
   .na {
-    
   }
 `;
 
@@ -154,119 +153,124 @@ const CardTitle = styled.div`
   color: #3b3a38;
 `;
 interface IReview {
-    bookId: number;
-    item?: any;
-    isUserReview?: boolean,
-    setYourReviews?: () => {}
+  bookId: number;
+  item?: any;
+  isUserReview?: boolean;
+  setYourReviews?: (p: any[]) => {};
 }
 
-const Review: React.FC<IReview> = ({
-                                   bookId,
-                                   item,
-                                   isUserReview = false,
-                                   setYourReviews
-                               }) => {
-    const [showShowMore, setShowShowMore] = useState<boolean>(true);
-    const [showReviewForm, setShowReviewForm] = useState<boolean>(false);
-    const reviewRef = useRef<any>(null);
-    const {setUser} = useUserContext();
+const Review: React.FC<IReview> = ({ bookId, item, isUserReview = false, setYourReviews }) => {
+  const [showShowMore, setShowShowMore] = useState<boolean>(true);
+  const [showReviewForm, setShowReviewForm] = useState<boolean>(false);
+  const reviewRef = useRef<any>(null);
+  const { setUser } = useUserContext();
 
-    useEffect(() => {
-        if (reviewRef.current) {
-            const node = reviewRef.current;
-            if (node?.clientHeight === node.scrollHeight) {
-                setShowShowMore(false);
-            }
-        }
-    }, []);
+  useEffect(() => {
+    if (reviewRef.current) {
+      const node = reviewRef.current;
+      if (node?.clientHeight === node.scrollHeight) {
+        setShowShowMore(false);
+      }
+    }
+  }, []);
 
-    const deleteReview = async () => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reviews/delete`, {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id: bookId,
-            }),
-        });
+  const deleteReview = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reviews/delete`, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: bookId,
+      }),
+    });
 
-        const data = await res.json();
-        if (data.status === 'success') {
-            setYourReviews([]);
-        }
-    };
+    const data = await res.json();
+    if (data.status === 'success') {
+      if (setYourReviews) {
+        setYourReviews([]);
+      }
+    }
+  };
 
-    return (
-        <ReviewContainer>
-            <div>
-                <div>
-                    <Image
-                        src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-                        height={50}
-                        width={50}
-                        alt={''}/>
-                    <div>
-                        <h4>{item.userId.name}</h4>
-                        <StarRating>
-                            <Rating initialValue={item.stars} iconsCount={5} readonly={true} fillColor="#ffcd17"
-                                    emptyColor="#a8a8a5" allowHover={false} size={20}/>
-                            {item.stars ? (
-                                <RatingText>{`(${item.stars} stars)`}</RatingText>
-                            ) : (
-                                <RatingText className="na">{`Rating not available.`}</RatingText>
-                            )}
-                        </StarRating>
-                    </div>
-                </div>
-            </div>
-            <ReviewTextArea ref={reviewRef}
-                            className={`reviewContent ${showShowMore ? 'truncate' : ''}`}>
-                {item.review}
-            </ReviewTextArea>
-            {isUserReview && (
-                <div>
-                    <p className={'delete'} onClick={deleteReview}>
-                        Delete
-                    </p>
-                    <p
-                        className={'edit'}
-                        onClick={() => {
-                            setShowReviewForm(() => true);
-                        }}
-                    >
-                        Edit
-                    </p>
-                </div>
-            )}
+  return (
+    <ReviewContainer>
+      <div>
+        <div>
+          <Image
+            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+            height={50}
+            width={50}
+            alt={''}
+          />
+          <div>
+            <h4>{item.userId.name}</h4>
+            <StarRating>
+              <Rating
+                initialValue={item.stars}
+                iconsCount={5}
+                readonly={true}
+                fillColor="#ffcd17"
+                emptyColor="#a8a8a5"
+                allowHover={false}
+                size={20}
+              />
+              {item.stars ? (
+                <RatingText>{`(${item.stars} stars)`}</RatingText>
+              ) : (
+                <RatingText className="na">{`Rating not available.`}</RatingText>
+              )}
+            </StarRating>
+          </div>
+        </div>
+      </div>
+      <ReviewTextArea
+        readOnly
+        ref={reviewRef}
+        className={`reviewContent ${showShowMore ? 'truncate' : ''}`}
+      >
+        {item.review}
+      </ReviewTextArea>
+      {isUserReview && (
+        <div>
+          <p className={'delete'} onClick={deleteReview}>
+            Delete
+          </p>
+          <p
+            className={'edit'}
+            onClick={() => {
+              setShowReviewForm(() => true);
+            }}
+          >
+            Edit
+          </p>
+        </div>
+      )}
 
-            {showShowMore && (
-                <span
-                    className={'showMore'}
-                    onClick={() => {
-                        setShowShowMore(false);
-                    }}
-                >
-            Show more
-          </span>
-            )}
+      {showShowMore && (
+        <span
+          className={'showMore'}
+          onClick={() => {
+            setShowShowMore(false);
+          }}
+        >
+          Show more
+        </span>
+      )}
 
-            {
-                isUserReview && (
-                    <EditReview
-                        bookId={bookId}
-                        showReviewForm={showReviewForm}
-                        setShowReviewForm={setShowReviewForm}
-                        prevRating={item.stars}
-                        prevReview={item.review}
-                        setYourReviews={setYourReviews}
-                    />
-                )
-            }
-        </ReviewContainer>
-    )
-        ;
+      {isUserReview && (
+        <EditReview
+          bookId={bookId}
+          showReviewForm={showReviewForm}
+          setShowReviewForm={setShowReviewForm}
+          prevRating={item.stars}
+          prevReview={item.review}
+          setYourReviews={setYourReviews}
+        />
+      )}
+    </ReviewContainer>
+  );
 };
 
 export default Review;

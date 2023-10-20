@@ -1,7 +1,8 @@
-import React, {useEffect, useState, useContext} from 'react';
+// @ts-nocheck
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import {useUserContext} from "@/hooks/useUserContext";
+import { useUserContext } from '@/hooks/useUserContext';
 
 const Container = styled.div`
   margin: 0 5%;
@@ -98,120 +99,119 @@ const EmptyCart = styled.div`
 `;
 
 const Cart = () => {
-    const {user, setUser} = useUserContext();
-    const [cart, setCart] = useState<any>([]);
+  const { user, setUser } = useUserContext();
+  const [cart, setCart] = useState<any>([]);
 
-    useEffect(() => {
-        if (user) {
-            setCart(() => user.cartItems);
-        }
-    }, [user]);
+  useEffect(() => {
+    if (user) {
+      setCart(() => user.cartItems);
+    }
+  }, [user]);
 
-    const removeFromCart = async (id) => {
-        try {
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/cart/remove/${id}`,
-                {
-                    method: 'DELETE',
-                    credentials: 'include',
-                }
-            );
+  const removeFromCart = async (id) => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cart/remove/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
 
-            const data = await res.json();
-            if (data.status === 'success') {
-                const cartItems = user.cartItems.filter((item) => item.bookId !== id);
-                setUser((prev) => {
-                    return {
-                        ...prev,
-                        cartItems,
-                    };
-                });
-                setCart(() => cart.filter((item: any) => item._id !== id));
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const checkout = async () => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/payment`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify(
-                cart.map((item) => {
-                    return {id: item.bookId, quantity: item.quantity};
-                })
-            ),
+      const data = await res.json();
+      if (data.status === 'success') {
+        const cartItems = user.cartItems.filter((item) => item.bookId !== id);
+        setUser((prev) => {
+          return {
+            ...prev,
+            cartItems,
+          };
         });
+        setCart(() => cart.filter((item: any) => item._id !== id));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-        const {status, message} = await res.json();
-        if (status === 'success') {
-            window.location = message.url;
-        } else {
-            console.log(message);
-        }
-    };
+  const checkout = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/payment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(
+        cart.map((item) => {
+          return { id: item.bookId, quantity: item.quantity };
+        })
+      ),
+    });
 
-    return (
-        <Container>
-            <h2 className={'title'}>Cart</h2>
-            {cart.length === 0 && (
-                <EmptyCart>
-                    <p>{":("}</p>
-                    <p>Your cart is empty</p>
-                </EmptyCart>
-            )}
-            {cart.length > 0 &&
-                cart[0]?.image &&
-                cart.map((item, index) => (
-                    <Item key={index}>
-                        <div className={'itemDetails'}>
-                            <ItemTitle>
-                                {`${item.title}`} <span>(X{item.quantity})</span>
-                            </ItemTitle>
-                            <p className={'price'}>
-                                Rs: {item.price}{' '}
-                                <Remove
-                                    onClick={() => {
-                                        removeFromCart(item.bookId);
-                                    }}
-                                >
-                                    Remove
-                                </Remove>
-                            </p>
-                        </div>
-                        <ImageWrapper>
-                            {item.image && (
-                                <Image
-                                    src={
-                                        item.image.includes('http')
-                                            ? item.image
-                                            : `${process.env.NEXT_PUBLIC_BASE_URL}${item.image}`
-                                    }
-                                    layout="fill"
-                                    alt={''}/>
-                            )}
-                        </ImageWrapper>
-                    </Item>
-                ))}
-            {cart.length > 0 && (
-                <Buttons>
-                    <Total>
-                        Total: <span> {
-                        cart.reduce((accumulator, currentValue) => {
-                            return (
-                                accumulator + currentValue.price * currentValue.quantity
-                            );
-                        }, 0)}</span>
-                    </Total>
-                    <PrimaryButton onClick={checkout}>Checkout</PrimaryButton>
-                </Buttons>
-            )}
-        </Container>
-    );
+    const { status, message } = await res.json();
+    if (status === 'success') {
+      window.location = message.url;
+    } else {
+      console.log(message);
+    }
+  };
+
+  return (
+    <Container>
+      <h2 className={'title'}>Cart</h2>
+      {cart.length === 0 && (
+        <EmptyCart>
+          <p>{':('}</p>
+          <p>Your cart is empty</p>
+        </EmptyCart>
+      )}
+      {cart.length > 0 &&
+        cart[0]?.image &&
+        cart.map((item, index) => (
+          <Item key={index}>
+            <div className={'itemDetails'}>
+              <ItemTitle>
+                {`${item.title}`} <span>(X{item.quantity})</span>
+              </ItemTitle>
+              <p className={'price'}>
+                Rs: {item.price}{' '}
+                <Remove
+                  onClick={() => {
+                    removeFromCart(item.bookId);
+                  }}
+                >
+                  Remove
+                </Remove>
+              </p>
+            </div>
+            <ImageWrapper>
+              {item.image && (
+                <Image
+                  src={
+                    item.image.includes('http')
+                      ? item.image
+                      : `${process.env.NEXT_PUBLIC_BASE_URL}${item.image}`
+                  }
+                  layout="fill"
+                  alt={''}
+                />
+              )}
+            </ImageWrapper>
+          </Item>
+        ))}
+      {cart.length > 0 && (
+        <Buttons>
+          <Total>
+            Total:{' '}
+            <span>
+              {' '}
+              {cart.reduce((accumulator, currentValue) => {
+                return accumulator + currentValue.price * currentValue.quantity;
+              }, 0)}
+            </span>
+          </Total>
+          <PrimaryButton onClick={checkout}>Checkout</PrimaryButton>
+        </Buttons>
+      )}
+    </Container>
+  );
 };
 
 export default Cart;

@@ -1,9 +1,9 @@
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import styled from "styled-components";
-import {useUserContext} from "@/hooks/useUserContext";
-import addToCart from "@/utils/addToCart";
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import styled from 'styled-components';
+import { useUserContext } from '@/hooks/useUserContext';
+import addToCart from '@/utils/addToCart';
 
 const BookContainer = styled.div`
   cursor: pointer;
@@ -57,40 +57,45 @@ const BookCardContainer = styled.div`
   gap: 1rem;
 `;
 
-const BookCard = ({books, type = "user"}) => {
-    const {setUser} = useUserContext();
+const BookCard = ({ books, type = 'user' }: { books: any; type?: any }) => {
+  const { setUser } = useUserContext();
 
-    return (
-        <BookCardContainer>
-            {books.map((book) => (
-                <BookContainer key={book._id}>
-                    <Link href={type === "user" ? `/book/${book._id}` : `/admin/${book._id}`}>
-                        <div>
-                            <ImageWrapper>
-                                <Image
-                                    src={book.image.includes("http") ? book.image : `${process.env.NEXT_PUBLIC_BASE_URL}${book.image}`}
-                                    layout="fill"
-                                    alt={''}/>
-                            </ImageWrapper>
-                            <BookTitle>{book.title}</BookTitle>
-                            {book?.authors && <Author>{book.authors[0]}</Author>}
-                        </div>
-                    </Link>
-                    {type !== "admin" && book?.isInCart ? (
-                        <AddedToCart>Added to cart</AddedToCart>
-                    ) : (
-                        type !== "admin" && (
-                            <AddToCart
-                                onClick={() => addToCart(book._id, book.title, book.image, book.price, setUser)}
-                            >
-                                Add to cart
-                            </AddToCart>
-                        )
-                    )}
-                </BookContainer>
-            ))}
-        </BookCardContainer>
-    );
+  return (
+    <BookCardContainer>
+      {books.map((book: any) => (
+        <BookContainer key={book._id}>
+          <Link href={type === 'user' ? `/book/${book._id}` : `/admin/${book._id}`}>
+            <div>
+              <ImageWrapper>
+                <Image
+                  src={
+                    book.image.includes('http')
+                      ? book.image
+                      : `${process.env.NEXT_PUBLIC_BASE_URL}${book.image}`
+                  }
+                  layout="fill"
+                  alt={''}
+                />
+              </ImageWrapper>
+              <BookTitle>{book.title}</BookTitle>
+              {book?.authors && <Author>{book.authors[0]}</Author>}
+            </div>
+          </Link>
+          {type !== 'admin' && book?.isInCart ? (
+            <AddedToCart>Added to cart</AddedToCart>
+          ) : (
+            type !== 'admin' && (
+              <AddToCart
+                onClick={() => addToCart(book._id, book.title, book.image, book.price, setUser)}
+              >
+                Add to cart
+              </AddToCart>
+            )
+          )}
+        </BookContainer>
+      ))}
+    </BookCardContainer>
+  );
 };
 
 export default BookCard;

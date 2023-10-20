@@ -1,9 +1,10 @@
+// @ts-nocheck
 import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router'; // Make sure to import addToCart from your cart utilities
 import { useUserContext } from '@/hooks/useUserContext';
-import WriteReview from '@/components/Review/EditReview';
+import WriteReview from '@/components/Review/WriteReview';
 import Reviews from '@/components/Review/Reviews';
 import addToCart from '@/utils/addToCart';
 
@@ -91,6 +92,9 @@ const PostHeroWrapper = styled.div`
 const PostHero = styled.div`
   display: flex;
   gap: 2rem;
+  .reviewsContainer {
+    width: 100%;
+  }
 `;
 
 const ExcerptContainer = styled.div`
@@ -114,7 +118,7 @@ const ProductPage = () => {
       });
       const data = await res.json();
 
-      if (user?.cartItems.length > 0) {
+      if (user?.cartItems?.length > 0) {
         user.cartItems.map((item: any) => {
           if (item.bookId === data.message._id) {
             setBook(() => {

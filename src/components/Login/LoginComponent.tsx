@@ -4,16 +4,15 @@ import {
   Container,
   ContainerInput,
   ContainerP,
-  Logo,
   Message,
-  PrimaryButton,
-  SecondaryButton,
   Strong,
   Wrapper,
 } from './Login.styles';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useUserContext } from '@/hooks/useUserContext';
+import Logo from '@/components/Logo/Logo';
+import { PrimaryButton, SecondaryButton } from '@/components/Buttons';
 
 const LoginComponent: React.FC = () => {
   const [message, setMessage] = useState<string>('');
@@ -69,7 +68,7 @@ const LoginComponent: React.FC = () => {
   return (
     <Container>
       <Wrapper>
-        <Logo>Kitaap</Logo>
+        <Logo link={'/'} />
         <ContainerP>Online shop to buy all your favorite books at one place.</ContainerP>
         <Card>
           <Message>{message}</Message>

@@ -9,11 +9,12 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user } = useUserContext();
-
+  console.log('LAyout', user);
   return (
     <div>
-      {user?.isUser && <Nav />}
-      {user?.isAdmin && <AdminNav />}
+      <Nav />
+      {/*{user?.isUser && <Nav />}*/}
+      {/*{user?.isAdmin && <AdminNav />}*/}
       {children}
     </div>
   );
