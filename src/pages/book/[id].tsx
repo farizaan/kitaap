@@ -1,15 +1,15 @@
 // @ts-nocheck
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { useRouter } from 'next/router'; // Make sure to import addToCart from your cart utilities
+import { useRouter } from 'next/router';
 import { useUserContext } from '@/hooks/useUserContext';
 import WriteReview from '@/components/Review/WriteReview';
 import Reviews from '@/components/Review/Reviews';
 import addToCart from '@/utils/addToCart';
 
 const Container = styled.div`
-  margin: 2rem 5%;
+  //margin: 2rem 5%;
   padding: 2rem;
   display: flex;
   justify-content: space-between;
@@ -67,7 +67,6 @@ const PrimaryButton = styled.button<{ addedToCart?: boolean }>`
 `;
 
 const SecondaryButton = styled.button`
-  border: none;
   border-radius: 50px;
   border: 2px solid #f78f02;
   background: none;
@@ -95,10 +94,6 @@ const PostHero = styled.div`
   .reviewsContainer {
     width: 100%;
   }
-`;
-
-const ExcerptContainer = styled.div`
-  flex: 0 0 100%;
 `;
 
 const ProductPage = () => {

@@ -1,12 +1,12 @@
 import React from 'react'; // Replace with the correct import path
 import Link from 'next/link';
 import styled from 'styled-components';
-import illustration from "../../../public/Group.svg";
-import Image from "next/image";
+import illustration from '../../../public/Group.svg';
+import Image from 'next/image';
 // Replace with the correct import path
 
 const Container = styled.div`
-  margin: 10px 5%;
+  margin-top: 20px;
   padding: 2.5rem 5rem;
   background-color: #f4e8de;
   border-radius: 10px;
@@ -69,26 +69,26 @@ const ImageComponent = styled(Image)`
 `;
 
 const Card: React.FC = () => {
-    return (
-        <Container>
-            <Text>
-                <Title>Grow your knowledge with us</Title>
-                <p>
-                    Explore from hundreds of books. Easy 3 steps to find your next
-                    favorite book. Search, select, and buy.
-                </p>
-                <Buttons>
-                    <PrimaryButton>Explore</PrimaryButton>
-                    <Link href="/cart">
-                        <SecondaryButton>View cart</SecondaryButton>
-                    </Link>
-                </Buttons>
-            </Text>
-            <Illustrations>
-                <ImageComponent src={illustration} alt={''} />
-            </Illustrations>
-        </Container>
-    );
+  return (
+    <Container>
+      <Text>
+        <Title>Grow your knowledge with us</Title>
+        <p>
+          Explore from hundreds of books. Easy 3 steps to find your next favorite book. Search,
+          select, and buy.
+        </p>
+        <Buttons>
+          <PrimaryButton>Explore</PrimaryButton>
+          <Link href="/cart">
+            <SecondaryButton>View cart</SecondaryButton>
+          </Link>
+        </Buttons>
+      </Text>
+      <Illustrations>
+        <ImageComponent src={illustration} alt={''} />
+      </Illustrations>
+    </Container>
+  );
 };
 
 export default Card;

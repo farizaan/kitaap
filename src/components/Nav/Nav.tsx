@@ -1,17 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useUserContext } from '@/hooks/useUserContext';
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-  NavLinks,
-  StyledIcon,
-  StyledNav,
-  UserDetails,
-  UserInfo,
-} from '@/components/Nav/Nav.styles';
+import { NavLinks, StyledIcon, UserDetails, UserInfo } from '@/components/Nav/Nav.styles';
 import Logo from '@/components/Logo/Logo';
 import Search from '@/components/Search/Search';
+import { Button, Flex, useDisclosure } from '@chakra-ui/react';
+import { HamburgerIcon } from '@chakra-ui/icons';
+import DrawerComponent from '@/components/Nav/DrawerComponent';
+// import DrawerComponent from '@/components/Nav/DrawerComponent';
 export interface IBooks {
   _id: string;
   image: string;
@@ -20,11 +18,13 @@ export interface IBooks {
 }
 const Nav = () => {
   const navRef = useRef(null);
-  const [searchResult, setSearchResult] = useState<IBooks[] | []>([]);
+  const [searchResult] = useState<IBooks[] | []>([]);
   const router = useRouter();
   const { user, setUser } = useUserContext();
   const [showUserDetails, setShowUserDetails] = useState(false);
   const observer = useRef();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef<any>();
   const logout = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/user/logout`, {
       method: 'POST',
@@ -33,7 +33,7 @@ const Nav = () => {
     const data = await res.json();
     if (data.status === 'success') {
       setUser(null);
-      router.push('/login');
+      // router.push('/login');
     }
   };
   useEffect(() => {
@@ -55,7 +55,6 @@ const Nav = () => {
     }
   }, [showUserDetails]);
   const currentTab = () => {
-    console.log(router.asPath);
     if (router.asPath.includes('comics')) return 'comics';
     else if (router.asPath.includes('novels')) return 'novels';
     else if (router.asPath.includes('finance')) return 'finance';
@@ -65,72 +64,78 @@ const Nav = () => {
   };
 
   console.log('searchResult', searchResult);
+  const onClickUserIcon = useCallback(() => {
+    if (user) {
+      setShowUserDetails((prev) => !prev);
+      return;
+    }
+    router.push('/login');
+  }, [user]);
+
   return (
     <>
-      <StyledNav ref={navRef}>
+      <Flex
+        ref={navRef}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+        paddingY={'2rem'}
+        position={'sticky'}
+        top={'-0.5rem'}
+        transition={'0.2s padding'}
+        backgroundColor={'white'}
+        zIndex={99}
+        width={'100%'}
+      >
         <Logo link={'/'} />
         <Search />
-        {/*<SearchWrapper>*/}
-        {/*  <StyledSearch>*/}
-        {/*    <input type="text" placeholder="Search by title or author" onChange={handleOnChange} />*/}
-        {/*    <SearchList>*/}
-        {/*      {searchResult.map((item, idx) => {*/}
-        {/*        return (*/}
-        {/*          <Link href={`/book/${item?._id}`} key={idx}>*/}
-        {/*            <SearchItem>*/}
-        {/*              <Image*/}
-        {/*                src={*/}
-        {/*                  item?.image.includes('http')*/}
-        {/*                    ? item?.image*/}
-        {/*                    : `${process.env.NEXT_PUBLIC_BASE_URL}/${item?.image}`*/}
-        {/*                }*/}
-        {/*                height={90}*/}
-        {/*                width={60}*/}
-        {/*                alt={''}*/}
-        {/*              />*/}
-        {/*              <div>*/}
-        {/*                <SearchTitle>{item?.title}</SearchTitle>*/}
-        {/*                <Authors>{item?.authors.join(', ')}</Authors>*/}
-        {/*              </div>*/}
-        {/*            </SearchItem>*/}
-        {/*          </Link>*/}
-        {/*        );*/}
-        {/*      })}*/}
-        {/*    </SearchList>*/}
-        {/*  </StyledSearch>*/}
-        {/*</SearchWrapper>*/}
-        <UserInfo>
-          <div className={'user'}>
-            <StyledIcon title="User" onClick={() => setShowUserDetails((prev) => !prev)}>
-              <Image src={'/user.png'} height={35} width={35} alt={''}></Image>
+        <Flex alignItems={'center'} display={{ base: 'none', md: 'block' }}>
+          <UserInfo>
+            <div className={'user'}>
+              <StyledIcon title="User" onClick={onClickUserIcon}>
+                <Image src={'/user.png'} height={35} width={35} alt={''}></Image>
 
-              <UserDetails className={`${!showUserDetails && 'show'}`}>
-                <h5>Signed in as</h5>
-                <p>
-                  Name: <span>{user?.name}</span>
-                </p>
-                <p>
-                  Email: <span>{user?.email}</span>
-                </p>
-              </UserDetails>
-            </StyledIcon>
-          </div>
-          <Link href={'/cart'}>
-            <StyledIcon
-              title="Cart"
-              amount={user?.cartItems?.length}
-              data-content={`${user.cartItems.length}`}
-            >
-              <Image src={'/cart.png'} height={35} width={35} alt={''} />
-            </StyledIcon>
-          </Link>
-          {user?.isUser && (
-            <StyledIcon onClick={logout} title="Logout">
-              <Image src={'/logout.png'} height={20} width={20} alt={''} />
-            </StyledIcon>
-          )}
-        </UserInfo>
-      </StyledNav>
+                <UserDetails className={`${!showUserDetails && 'show'}`}>
+                  <h5>Signed in as</h5>
+                  <p>
+                    Name: <span>{user?.name}</span>
+                  </p>
+                  <p>
+                    Email: <span>{user?.email}</span>
+                  </p>
+                </UserDetails>
+              </StyledIcon>
+            </div>
+            {user && (
+              <Link href={'/cart'}>
+                <StyledIcon
+                  title="Cart"
+                  amount={user?.cartItems?.length}
+                  data-content={`${user?.cartItems?.length}`}
+                >
+                  <Image src={'/cart.png'} height={35} width={35} alt={''} />
+                </StyledIcon>
+              </Link>
+            )}
+            {user?.isUser && (
+              <StyledIcon onClick={logout} title="Logout">
+                <Image src={'/logout.png'} height={20} width={20} alt={''} />
+              </StyledIcon>
+            )}
+          </UserInfo>
+        </Flex>
+        <Button
+          display={{ base: 'block', md: 'none' }}
+          ref={btnRef}
+          onClick={onOpen}
+          backgroundColor={'#fff'}
+          _hover={{ backgroundColor: '#fff' }}
+          boxSize={6}
+        >
+          <HamburgerIcon />
+        </Button>
+        <DrawerComponent isOpen={isOpen} onClose={onClose} btnRef={btnRef} logout={logout} />
+      </Flex>
+
       {/* Linksssssssssss--------- */}
       <NavLinks>
         <p className={currentTab() === 'home' ? 'active' : ''}>
@@ -146,9 +151,7 @@ const Nav = () => {
           <Link href="/category/selfhelp">Self help</Link>
         </p>
         <p className={currentTab() === 'novels' ? 'active' : ''}>
-          <Link href="/category/novels" className={currentTab() === 'novels' ? 'active' : ''}>
-            Novels
-          </Link>
+          <Link href="/category/novels">Novels</Link>
         </p>
       </NavLinks>
     </>

@@ -1,11 +1,11 @@
 // @ts-nocheck
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useUserContext } from '@/hooks/useUserContext';
 
 const Container = styled.div`
-  margin: 0 5%;
+  //margin: 0 5%;
   padding: 2.5rem 5rem;
   background-color: #f4e8de;
   margin-top: 2rem;
@@ -51,8 +51,6 @@ const ImageWrapper = styled.div`
   border-radius: 10px;
   overflow: hidden;
   position: relative;
-  height: 12rem;
-  width: 8rem;
   height: 9rem;
   width: 6rem;
 `;

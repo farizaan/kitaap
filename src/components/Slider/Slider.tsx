@@ -5,7 +5,7 @@ import useHorizontalScroll from '@/hooks/useHorizontalScroll';
 import BookCard from '@/components/BookCard/BookCard';
 
 const Container = styled.div`
-  margin: 2rem 5%;
+  margin: 2rem 0;
 `;
 
 const Title = styled.h3`
@@ -26,7 +26,7 @@ const Books = styled.div`
 
 const Slider: React.FC<{ popularBooks: any[] }> = ({ popularBooks }) => {
   const containerRef = useHorizontalScroll();
-  const { user, setUser } = useUserContext();
+  const { user } = useUserContext();
   const [books, setBooks] = useState<any[]>([]);
 
   useEffect(() => {

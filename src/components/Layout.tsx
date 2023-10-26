@@ -1,22 +1,20 @@
-import React, { ReactNode, useContext } from 'react';
-import { UserContext } from '@/context/UserContext';
+import React, { ReactNode } from 'react';
 import Nav from '@/components/Nav/Nav';
 import { useUserContext } from '@/hooks/useUserContext';
-import AdminNav from '@/components/Admin/AdminNav';
+import { Container } from '@chakra-ui/react';
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { user } = useUserContext();
-  console.log('LAyout', user);
+  // const { user } = useUserContext();
   return (
-    <div>
+    <Container maxW="container.xl">
       <Nav />
       {/*{user?.isUser && <Nav />}*/}
       {/*{user?.isAdmin && <AdminNav />}*/}
       {children}
-    </div>
+    </Container>
   );
 };
 

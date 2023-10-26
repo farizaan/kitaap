@@ -1,25 +1,9 @@
 import styled from 'styled-components';
-import exp from 'constants';
-
-export const StyledNav = styled('nav')`
-  display: flex;
-  padding: 2rem 5%;
-  justify-content: space-between;
-  position: sticky;
-  top: -0.5rem;
-  transition: 0.2s padding;
-  z-index: 99;
-  background-color: white;
-
-  &.isPinned {
-    padding: 1.2rem 5% 0.7rem 5%;
-    background-color: white;
-  }
-`;
 
 export const UserInfo = styled('div')`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 1.5rem;
   flex: 1;
 
@@ -71,6 +55,7 @@ export const StyledIcon = styled('div')<{ amount?: any }>`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
   &::after {
     content: attr(data-content);
     position: absolute;
