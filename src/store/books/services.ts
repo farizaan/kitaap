@@ -6,6 +6,6 @@ export const getBooksService = (payload: IBooksServicePayload) => {
 
   return ApiInstance({
     method: 'get',
-    url: `/api/books/${search}`,
+    url: `/api/books${search}`,
   });
 };
