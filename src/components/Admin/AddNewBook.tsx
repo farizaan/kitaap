@@ -191,11 +191,15 @@ const AddNewBook = () => {
           </div>
           <div>
             <Label>Description</Label>
-            <Textarea name="description" placeholder="Eg: Description" />
+            <Textarea style={{ width: '100%' }} name="description" placeholder="Eg: Description" />
           </div>
           <div>
             <Label>Authors</Label>
-            <Input name="authors" type="text" placeholder="Eg: Bishal Niroula, Mohan Bisunke" />
+            <Input
+              name="authors"
+              type="text"
+              placeholder="Eg: Fariza Nussipova, Nazzere Oryngozha"
+            />
           </div>
           <div>
             <Label>Category</Label>
@@ -209,7 +213,7 @@ const AddNewBook = () => {
             </Select>
           </div>
           <div>
-            <Label>Price(NRs)</Label>
+            <Label>Price(Tng)</Label>
             <Input type="number" placeholder="Eg: 1200" name="price" />
           </div>
           <div>

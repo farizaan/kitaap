@@ -11,6 +11,7 @@ const nextConfig = {
       'm.media-amazon.com',
       'cdn.pixabay.com',
       'localhost',
+      'encrypted-tbn0.gstatic.com',
     ],
   },
   typescript: {
