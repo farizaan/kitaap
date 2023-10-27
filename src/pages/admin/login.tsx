@@ -14,6 +14,7 @@ import {
   Strong,
   Wrapper,
 } from '@/components/Login/Login.styles';
+import { HStack, PinInput, PinInputField } from '@chakra-ui/react';
 const Login = () => {
   const [message, setMessage] = useState('');
   const { user, setUser } = useUserContext();
@@ -23,7 +24,15 @@ const Login = () => {
   const passwordRef = useRef(null);
   const otpFormRef = useRef(null);
   const inputCredentials = useRef({ email: null, password: null });
+  const [otpValue, setOtpValue] = React.useState('');
 
+  const handleChange = (value: string) => {
+    setOtpValue(value);
+  };
+
+  const handleComplete = (value: string) => {
+    console.log(value);
+  };
   useEffect(() => {
     if (user?.isAdmin) {
       router.push('/admin');
@@ -75,9 +84,11 @@ const Login = () => {
   };
   const handleOtpInput = (event) => {
     setMessage('');
-    if (event.target.value.length > event.target.getAttribute('maxLength'))
-      event.target.value = event.target.value.slice(0, event.target.getAttribute('maxLength'));
-    else if (event.target.value.length === 1) {
+    console.log('event.target.value', event.target.value);
+    // if (event.target.value.length > event.target.getAttribute('maxLength'))
+    //   event.target.value = event.target.value.slice(0, event.target.getAttribute('maxLength'));
+    // else
+    if (event.target.value.length === 1) {
       const index = parseInt(event.target.getAttribute('data-id'));
       otpFormRef.current.childNodes[index + 1]?.focus();
     }
@@ -86,10 +97,10 @@ const Login = () => {
     const email = inputCredentials.current.email;
     console.log(email);
     let otp = [];
-    otpFormRef.current.childNodes.forEach((input) => otp.push(input.value));
-    otp = otp.join('');
-
-    if (otp.length !== 5) {
+    // otpFormRef.current.childNodes.forEach((input) => otp.push(input.value));
+    // otp = otp.join('');
+    // console.log('otp', otp);
+    if (otpValue.length !== 5) {
       return setMessage('OTP must be 5 digits long');
     }
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/admin/login/verify-otp`, {
@@ -101,7 +112,7 @@ const Login = () => {
       body: JSON.stringify({
         email: inputCredentials.current.email,
         password: inputCredentials.current.password,
-        otp,
+        otp: otpValue,
       }),
     });
     console.log(res.status);
@@ -152,50 +163,64 @@ const Login = () => {
             {showOtpBox && (
               <div>
                 <Strong>Please enter your OTP</Strong>
-                <form ref={otpFormRef}>
-                  <div style={{ display: 'flex' }}>
-                    <ContainerInput
-                      style={{ width: '25px' }}
-                      type="number"
-                      placeholder=""
-                      maxLength={1}
-                      onInput={handleOtpInput}
-                      data-id="0"
-                    />
-                    <ContainerInput
-                      style={{ width: '25px' }}
-                      type="number"
-                      placeholder=""
-                      maxLength={1}
-                      onInput={handleOtpInput}
-                      data-id="1"
-                    />
-                    <ContainerInput
-                      style={{ width: '25px' }}
-                      type="number"
-                      placeholder=""
-                      maxLength={1}
-                      onInput={handleOtpInput}
-                      data-id="2"
-                    />
-                    <ContainerInput
-                      style={{ width: '25px' }}
-                      type="number"
-                      placeholder=""
-                      maxLength={1}
-                      onInput={handleOtpInput}
-                      data-id="3"
-                    />
-                    <ContainerInput
-                      style={{ width: '25px' }}
-                      type="number"
-                      placeholder=""
-                      maxLength={1}
-                      onInput={handleOtpInput}
-                      data-id="4"
-                    />
-                  </div>
-                </form>
+                <HStack justifyContent={'center'}>
+                  <PinInput
+                    value={otpValue}
+                    onChange={handleChange}
+                    onComplete={handleComplete}
+                    otp
+                  >
+                    <PinInputField />
+                    <PinInputField />
+                    <PinInputField />
+                    <PinInputField />
+                    <PinInputField />
+                  </PinInput>
+                </HStack>
+                {/*<form ref={otpFormRef}>*/}
+                {/*  <div style={{ display: 'flex' }}>*/}
+                {/*    <ContainerInput*/}
+                {/*      style={{ width: '25px' }}*/}
+                {/*      type="number"*/}
+                {/*      placeholder=""*/}
+                {/*      maxLength={1}*/}
+                {/*      onInput={handleOtpInput}*/}
+                {/*      data-id="0"*/}
+                {/*    />*/}
+                {/*    <ContainerInput*/}
+                {/*      style={{ width: '25px' }}*/}
+                {/*      type="number"*/}
+                {/*      placeholder=""*/}
+                {/*      maxLength={1}*/}
+                {/*      onInput={handleOtpInput}*/}
+                {/*      data-id="1"*/}
+                {/*    />*/}
+                {/*    <ContainerInput*/}
+                {/*      style={{ width: '25px' }}*/}
+                {/*      type="number"*/}
+                {/*      placeholder=""*/}
+                {/*      maxLength={1}*/}
+                {/*      onInput={handleOtpInput}*/}
+                {/*      data-id="2"*/}
+                {/*    />*/}
+                {/*    <ContainerInput*/}
+                {/*      style={{ width: '25px' }}*/}
+                {/*      type="number"*/}
+                {/*      placeholder=""*/}
+                {/*      maxLength={1}*/}
+                {/*      onInput={handleOtpInput}*/}
+                {/*      data-id="3"*/}
+                {/*    />*/}
+                {/*    <ContainerInput*/}
+                {/*      style={{ width: '25px' }}*/}
+                {/*      type="number"*/}
+                {/*      placeholder=""*/}
+                {/*      maxLength={1}*/}
+                {/*      onInput={handleOtpInput}*/}
+                {/*      data-id="4"*/}
+                {/*    />*/}
+                {/*  </div>*/}
+                {/*</form>*/}
                 <PrimaryButton type="submit" onClick={submitOtp}>
                   Verify OTP
                 </PrimaryButton>

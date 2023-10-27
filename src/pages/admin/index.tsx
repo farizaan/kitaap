@@ -6,7 +6,7 @@ import { useUserContext } from '@/hooks/useUserContext';
 
 // Define styled components
 const Container = styled.div`
-  padding: 0 5%;
+  padding: 20px 5%;
 `;
 
 const Tabs = styled.div`

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import BookCard from '@/components/BookCard/BookCard';
+import { alertService } from '@/services/alertService';
 
 const Container = styled.div`
   margin-bottom: 1rem;
@@ -161,7 +162,9 @@ const AddNewBook = () => {
         setAddedBooks((prev) => [data.message, ...prev]);
         // @ts-ignore
         formRef.current.reset();
+        alertService.success('Book successfully added!');
       } else if (data.status === 'error') {
+        alertService.error('Something went wrong...!');
         setMessage(() => data.message);
       }
       // @ts-ignore

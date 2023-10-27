@@ -7,10 +7,15 @@ import '../styles/globals.css';
 import { wrapper } from '@/store/store';
 import { Providers } from '@/components/App/providers';
 import { Poppins } from 'next/font/google';
+import { Provider } from 'react-redux';
 const poppins = Poppins({ weight: ['400', '500', '600'], subsets: ['latin'] });
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, ...rest }: AppProps) {
   const [user, setUser] = useState(null);
+  const {
+    store,
+    props: { pageProps },
+  } = wrapper.useWrappedStore(rest);
 
   const router = useRouter();
   const url = router.pathname.includes('/admin')
@@ -45,20 +50,22 @@ function MyApp({ Component, pageProps }: AppProps) {
     );
   }
   return (
-    <Providers>
-      <UserContext.Provider value={{ user, setUser }}>
-        <style jsx global>
-          {`
-            :root {
-              --font-poppins: ${poppins.style.fontFamily};
-            }
-          `}
-        </style>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </UserContext.Provider>
-    </Providers>
+    <Provider store={store}>
+      <Providers>
+        <UserContext.Provider value={{ user, setUser }}>
+          <style jsx global>
+            {`
+              :root {
+                --font-poppins: ${poppins.style.fontFamily};
+              }
+            `}
+          </style>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </UserContext.Provider>
+      </Providers>
+    </Provider>
   );
 }
-export default wrapper.withRedux(MyApp);
+export default MyApp;

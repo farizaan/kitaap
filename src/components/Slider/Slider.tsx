@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import { useUserContext } from '@/hooks/useUserContext';
 import useHorizontalScroll from '@/hooks/useHorizontalScroll';
 import BookCard from '@/components/BookCard/BookCard';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { getBooksInit } from '@/store/books/actions';
+import { getPopularBooks } from '@/store/books/selector';
 
 const Container = styled.div`
   margin: 2rem 0;
@@ -28,32 +31,25 @@ const Slider: React.FC<{ popularBooks: any[] }> = ({ popularBooks }) => {
   const containerRef = useHorizontalScroll();
   const { user } = useUserContext();
   const [books, setBooks] = useState<any[]>([]);
-
+  const dispatch = useAppDispatch();
+  const popBooks = useAppSelector(getPopularBooks);
   useEffect(() => {
-    (async () => {
-      const resPopularBooks = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/books/popularnow`,
-        {
-          method: 'GET',
-          credentials: 'include',
-        }
-      );
-      const dataPB = await resPopularBooks.json();
-      console.log(dataPB);
-      // @ts-ignore
-      const newBooks = dataPB?.message?.map((book) => {
-        let bookCopy = book;
+    dispatch(getBooksInit({ search: '/popularnow' }));
+  }, []);
+  useEffect(() => {
+    if (popBooks && popBooks?.length > 0) {
+      const newBooks = popBooks.map((item) => {
         // @ts-ignore
         user?.cartItems?.map((item) => {
-          if (item.bookId === book._id) {
-            bookCopy['isInCart'] = true;
+          if (item.bookId === item._id) {
+            item['isInCart'] = true;
           }
         });
-        return bookCopy;
+        return item;
       });
       setBooks(newBooks);
-    })();
-  }, [user]);
+    }
+  }, [popBooks, user]);
 
   return (
     <Container>

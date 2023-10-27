@@ -78,7 +78,7 @@ const SecondaryButton = styled.button`
 `;
 
 const PostHeroWrapper = styled.div`
-  margin: 3rem 5%;
+  margin: 3rem 0;
   position: relative;
 
   h2 {
@@ -159,19 +159,21 @@ const ProductPage = () => {
             By <span>{book?.authors?.join(', ')}</span>
           </Authors>
           <Description>{book.description}</Description>
-          <Buttons>
-            <PrimaryButton
-              addedToCart={book.isInCart}
-              onClick={() => {
-                if (!book.isInCart) {
-                  addToCart(book._id, book.title, book.image, book.price, setUser);
-                }
-              }}
-            >
-              {book.isInCart ? 'Added to cart' : 'Add to cart'}
-            </PrimaryButton>
-            <SecondaryButton>Reviews</SecondaryButton>
-          </Buttons>
+          {user && (
+            <Buttons>
+              <PrimaryButton
+                addedToCart={book.isInCart}
+                onClick={() => {
+                  if (!book.isInCart) {
+                    addToCart(book._id, book.title, book.image, book.price, setUser);
+                  }
+                }}
+              >
+                {book.isInCart ? 'Added to cart' : 'Add to cart'}
+              </PrimaryButton>
+              <SecondaryButton>Reviews</SecondaryButton>
+            </Buttons>
+          )}
         </BookDetails>
         <ImageContainer>
           <ImageWrapper>
@@ -195,7 +197,7 @@ const ProductPage = () => {
           {/*    <Excerpt/>*/}
           {/*</ExcerptContainer>*/}
           <div className={'reviewsContainer'}>
-            <h2>Reviews</h2>
+            {otherReviews.length > 0 || user ? <h2>Reviews</h2> : ''}
             {yourReviews.length === 0 && (
               <WriteReview id={book._id} setYourReviews={setYourReviews} />
             )}

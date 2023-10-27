@@ -5,6 +5,7 @@ import EditReview from './EditReview'; // You need to import the EditReview comp
 
 import { useUserContext } from '@/hooks/useUserContext';
 import { Rating } from 'react-simple-star-rating';
+import { Box, Flex } from '@chakra-ui/react';
 
 const ReviewContainer = styled.div`
   background-color: #f4e8de;
@@ -138,6 +139,9 @@ const StarRating = styled.div`
   gap: 0.3rem;
   .na {
   }
+  svg.star-svg {
+    display: inline;
+  }
 `;
 
 const RatingText = styled.div`
@@ -198,14 +202,16 @@ const Review: React.FC<IReview> = ({ bookId, item, isUserReview = false, setYour
     <ReviewContainer>
       <div>
         <div>
-          <Image
-            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-            height={50}
-            width={50}
-            alt={''}
-          />
-          <div>
+          <Flex alignItems={'center'} gap={'10px'}>
+            <Image
+              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+              height={50}
+              width={50}
+              alt={''}
+            />
             <h4>{item.userId.name}</h4>
+          </Flex>
+          <Flex>
             <StarRating>
               <Rating
                 initialValue={item.stars}
@@ -215,6 +221,7 @@ const Review: React.FC<IReview> = ({ bookId, item, isUserReview = false, setYour
                 emptyColor="#a8a8a5"
                 allowHover={false}
                 size={20}
+                style={{ display: 'flex' }}
               />
               {item.stars ? (
                 <RatingText>{`(${item.stars} stars)`}</RatingText>
@@ -222,7 +229,7 @@ const Review: React.FC<IReview> = ({ bookId, item, isUserReview = false, setYour
                 <RatingText className="na">{`Rating not available.`}</RatingText>
               )}
             </StarRating>
-          </div>
+          </Flex>
         </div>
       </div>
       <ReviewTextArea
@@ -233,7 +240,7 @@ const Review: React.FC<IReview> = ({ bookId, item, isUserReview = false, setYour
         {item.review}
       </ReviewTextArea>
       {isUserReview && (
-        <div>
+        <Box cursor={'pointer'}>
           <p className={'delete'} onClick={deleteReview}>
             Delete
           </p>
@@ -245,7 +252,7 @@ const Review: React.FC<IReview> = ({ bookId, item, isUserReview = false, setYour
           >
             Edit
           </p>
-        </div>
+        </Box>
       )}
 
       {showShowMore && (

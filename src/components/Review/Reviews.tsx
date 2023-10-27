@@ -6,7 +6,7 @@ import Review from '@/components/Review/Review';
 const Container = styled.div`
   .container {
     background-color: #f4e8de;
-    padding: 1rem;
+    //padding: 1rem;
     border-radius: 10px;
     margin-bottom: 1rem;
   }
@@ -37,40 +37,36 @@ const Reviews: React.FC<any> = ({
   setYourReviews,
 }) => {
   const { user } = useUserContext();
-  console.log('Your reviews', yourReviews);
+  console.log('Your reviews', otherReviews.length);
 
-  if (user) {
-    return (
-      <Container>
-        {yourReviews.length > 0 && (
-          <ReviewWrapper>
-            <Review
-              bookId={bookId}
-              item={yourReviews[0]}
-              isUserReview={true}
-              setYourReviews={setYourReviews}
-            />
-          </ReviewWrapper>
-        )}
+  return (
+    <Container>
+      {yourReviews.length > 0 && (
+        <ReviewWrapper>
+          <Review
+            bookId={bookId}
+            item={yourReviews[0]}
+            isUserReview={true}
+            setYourReviews={setYourReviews}
+          />
+        </ReviewWrapper>
+      )}
 
-        {otherReviews.length > 0 ? (
-          <ReviewWrapper>
-            <ReviewTitle>Other reviews ({otherReviews.length})</ReviewTitle>
-            {otherReviews.map((item: any) => (
-              <Review bookId={bookId} key={item.id} item={item} setYourReviews={setYourReviews} />
-            ))}
-          </ReviewWrapper>
-        ) : (
-          <ReviewWrapper>
-            <ReviewTitle>Other reviews ({otherReviews.length})</ReviewTitle>
-            <NotAvailable>No reviews yet.</NotAvailable>
-          </ReviewWrapper>
-        )}
-      </Container>
-    );
-  }
-
-  return null;
+      {otherReviews.length > 0 ? (
+        <ReviewWrapper>
+          <ReviewTitle>Other reviews ({otherReviews.length})</ReviewTitle>
+          {otherReviews.map((item: any) => (
+            <Review bookId={bookId} key={item.id} item={item} setYourReviews={setYourReviews} />
+          ))}
+        </ReviewWrapper>
+      ) : (
+        <ReviewWrapper>
+          <ReviewTitle>Other reviews ({otherReviews.length})</ReviewTitle>
+          <NotAvailable>No reviews yet.</NotAvailable>
+        </ReviewWrapper>
+      )}
+    </Container>
+  );
 };
 
 export default Reviews;

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { useUserContext } from '@/hooks/useUserContext';
 import { Rating } from 'react-simple-star-rating';
+import { alertService } from '@/services/alertService';
 
 const Container = styled.div`
   background-color: #f4e8de;
@@ -134,6 +135,9 @@ const StarRating = styled.div`
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  svg.star-svg {
+    display: inline;
+  }
 `;
 
 const RatingText = styled.div`
@@ -179,6 +183,7 @@ const EditReview: React.FC<any> = ({
       ]);
       setShowReviewForm(() => false);
     } else {
+      alertService.error(data.message || '');
       setError(data.message);
     }
   };

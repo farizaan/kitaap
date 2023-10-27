@@ -58,7 +58,7 @@ const BookCardContainer = styled.div`
 `;
 
 const BookCard = ({ books, type = 'user' }: { books: any; type?: any }) => {
-  const { setUser } = useUserContext();
+  const { user, setUser } = useUserContext();
 
   return (
     <BookCardContainer>
@@ -81,17 +81,18 @@ const BookCard = ({ books, type = 'user' }: { books: any; type?: any }) => {
               {book?.authors && <Author>{book.authors[0]}</Author>}
             </div>
           </Link>
-          {type !== 'admin' && book?.isInCart ? (
-            <AddedToCart>Added to cart</AddedToCart>
-          ) : (
-            type !== 'admin' && (
-              <AddToCart
-                onClick={() => addToCart(book._id, book.title, book.image, book.price, setUser)}
-              >
-                Add to cart
-              </AddToCart>
-            )
-          )}
+          {user &&
+            (type !== 'admin' && book?.isInCart ? (
+              <AddedToCart>Added to cart</AddedToCart>
+            ) : (
+              type !== 'admin' && (
+                <AddToCart
+                  onClick={() => addToCart(book._id, book.title, book.image, book.price, setUser)}
+                >
+                  Add to cart
+                </AddToCart>
+              )
+            ))}
         </BookContainer>
       ))}
     </BookCardContainer>

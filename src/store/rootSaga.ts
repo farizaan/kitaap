@@ -1,6 +1,6 @@
 import { all } from '@redux-saga/core/effects';
+import booksSagas from '@/store/books/sagas';
 
-function* rootSaga() {
-  yield all([]);
+export default function* rootSaga() {
+  yield all([...booksSagas]);
 }
-export default rootSaga();

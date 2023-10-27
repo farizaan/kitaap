@@ -7,12 +7,12 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  // const { user } = useUserContext();
+  const { user } = useUserContext();
   return (
     <Container maxW="container.xl">
-      <Nav />
+      {!user?.isAdmin && <Nav />}
       {/*{user?.isUser && <Nav />}*/}
-      {/*{user?.isAdmin && <AdminNav />}*/}
+      {/*{user?.isAdmin  <AdminNav />}*/}
       {children}
     </Container>
   );

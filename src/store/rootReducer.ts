@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
+import { booksReducer } from '@/store/books';
 
 const rootReducer = combineReducers({
-  // counter: counterReducer,
-  //add all your reducers here
+  booksReducer,
 });
 
 export default rootReducer;
