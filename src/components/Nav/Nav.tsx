@@ -9,6 +9,7 @@ import Search from '@/components/Search/Search';
 import { Button, Flex, useDisclosure } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import DrawerComponent from '@/components/Nav/DrawerComponent';
+import { Tabs } from '@/pages/admin';
 // import DrawerComponent from '@/components/Nav/DrawerComponent';
 export interface IBooks {
   _id: string;
@@ -16,6 +17,10 @@ export interface IBooks {
   title: string;
   authors: string[];
 }
+const tabs = [
+  { id: 'add', label: 'Add new book' },
+  { id: 'edit', label: 'Edit existing book' },
+];
 const Nav = () => {
   const navRef = useRef(null);
   const [searchResult] = useState<IBooks[] | []>([]);
@@ -25,6 +30,8 @@ const Nav = () => {
   const observer = useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef<any>();
+  const [currentAdminTab, setCurrentAdminTab] = useState('ANB');
+
   const logout = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/user/logout`, {
       method: 'POST',
@@ -71,7 +78,11 @@ const Nav = () => {
     }
     router.push('/login');
   }, [user]);
+  const onAdminTabClick = useCallback((tab) => {
+    setCurrentAdminTab(tab.id);
 
+    router.push(`/admin?tab=${tab.id}`);
+  }, []);
   return (
     <>
       <Flex
@@ -105,7 +116,7 @@ const Nav = () => {
                 </UserDetails>
               </StyledIcon>
             </div>
-            {user && (
+            {user?.isUser && (
               <Link href={'/cart'}>
                 <StyledIcon
                   title="Cart"
@@ -137,23 +148,38 @@ const Nav = () => {
       </Flex>
 
       {/* Linksssssssssss--------- */}
-      <NavLinks>
-        <p className={currentTab() === 'home' ? 'active' : ''}>
-          <Link href="/">Home</Link>
-        </p>
-        <p className={currentTab() === 'comics' ? 'active' : ''}>
-          <Link href="/category/comics">Comics</Link>
-        </p>
-        <p className={currentTab() === 'finance' ? 'active' : ''}>
-          <Link href="/category/finance">Finance</Link>
-        </p>
-        <p className={currentTab() === 'selfhelp' ? 'active' : ''}>
-          <Link href="/category/selfhelp">Self help</Link>
-        </p>
-        <p className={currentTab() === 'novels' ? 'active' : ''}>
-          <Link href="/category/novels">Novels</Link>
-        </p>
-      </NavLinks>
+      {!user?.isAdmin && (
+        <NavLinks>
+          <p className={currentTab() === 'home' ? 'active' : ''}>
+            <Link href="/">Home</Link>
+          </p>
+          <p className={currentTab() === 'comics' ? 'active' : ''}>
+            <Link href="/category/comics">Comics</Link>
+          </p>
+          <p className={currentTab() === 'finance' ? 'active' : ''}>
+            <Link href="/category/finance">Finance</Link>
+          </p>
+          <p className={currentTab() === 'selfhelp' ? 'active' : ''}>
+            <Link href="/category/selfhelp">Self help</Link>
+          </p>
+          <p className={currentTab() === 'novels' ? 'active' : ''}>
+            <Link href="/category/novels">Novels</Link>
+          </p>
+        </NavLinks>
+      )}
+      {user?.isAdmin && (
+        <Tabs>
+          {tabs.map((tab) => (
+            <div
+              key={tab.id}
+              className={currentAdminTab === tab.id ? 'tab activeTab' : 'tab'}
+              onClick={() => onAdminTabClick(tab)}
+            >
+              {tab.label}
+            </div>
+          ))}
+        </Tabs>
+      )}
     </>
   );
 };

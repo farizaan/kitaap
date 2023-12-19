@@ -35,7 +35,7 @@ const ImageContainer = styled.div`
   align-items: center;
 `;
 
-const Title = styled.h2`
+export const Title = styled.h2`
   color: #545353;
 `;
 

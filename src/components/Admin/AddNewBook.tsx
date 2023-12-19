@@ -4,7 +4,7 @@ import Image from 'next/image';
 import BookCard from '@/components/BookCard/BookCard';
 import { alertService } from '@/services/alertService';
 
-const Container = styled.div`
+export const Container = styled.div`
   margin-bottom: 1rem;
   display: flex;
   gap: 5rem;
@@ -13,7 +13,7 @@ const Container = styled.div`
   padding: 0 5%;
 `;
 
-const Form = styled.form`
+export const Form = styled.form`
   width: 60%;
   min-width: 40rem;
   display: flex;
@@ -34,12 +34,12 @@ const Sidebar = styled.div`
   }
 `;
 
-const Label = styled.label`
+export const Label = styled.label`
   font-size: 1rem;
   font-weight: 500;
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
   padding: 1rem;
   display: block;
   height: 3rem;
@@ -63,12 +63,12 @@ const Input = styled.input`
   }
 `;
 
-const Textarea = styled.textarea`
+export const Textarea = styled.textarea`
   resize: none;
   height: 10rem;
 `;
 
-const Select = styled.select`
+export const Select = styled.select`
   height: 3rem;
   width: 100%;
   border-radius: 10px;
@@ -77,7 +77,7 @@ const Select = styled.select`
   padding-left: 1rem;
 `;
 
-const CustomFileInput = styled.input`
+export const CustomFileInput = styled.input`
   &::-webkit-file-upload-button {
     border: 2px solid #f79102d4;
     padding: 1rem 1rem;
@@ -92,7 +92,7 @@ const CustomFileInput = styled.input`
   }
 `;
 
-const SubmitButton = styled.button`
+export const SubmitButton = styled.button`
   align-self: flex-start;
   padding: 1rem;
   border: none;
@@ -109,7 +109,7 @@ const SubmitButton = styled.button`
   }
 `;
 
-const Message = styled.p`
+export const Message = styled.p`
   width: 10rem;
   overflow: hidden;
 `;

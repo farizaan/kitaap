@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import AddNewBook from '@/components/Admin/AddNewBook';
 import { useRouter } from 'next/router';
 import { useUserContext } from '@/hooks/useUserContext';
+import EditBooks from '@/components/Admin/EditBooks';
 
 // Define styled components
 const Container = styled.div`
   padding: 20px 5%;
 `;
 
-const Tabs = styled.div`
+export const Tabs = styled.div`
   display: flex;
   gap: 2rem;
   justify-content: center;
@@ -44,8 +45,10 @@ function EditExistingBook() {
 }
 
 const Index = () => {
-  const [currentTab, setCurrentTab] = useState('ANB');
+  const [currentTab, setCurrentTab] = useState('add');
   const router = useRouter();
+  const { tab } = router.query;
+
   const { user, setUser } = useUserContext();
   useEffect(() => {
     if (!user?.isAdmin) {
@@ -55,19 +58,8 @@ const Index = () => {
   if (user?.isAdmin) {
     return (
       <Container>
-        <Tabs>
-          {tabs.map((tab) => (
-            <div
-              key={tab.id}
-              className={currentTab === tab.id ? 'tab activeTab' : 'tab'}
-              onClick={() => setCurrentTab(tab.id)}
-            >
-              {tab.label}
-            </div>
-          ))}
-        </Tabs>
-        {currentTab === 'ANB' && <AddNewBook />}
-        {currentTab === 'EEB' && <EditExistingBook />}
+        {!Boolean(tab) || (tab === 'add' && <AddNewBook />)}
+        {tab === 'edit' && <EditBooks />}
       </Container>
     );
   }
